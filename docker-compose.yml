@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn -w 3 --reload --bind 0.0.0.0:8000 -k uvicorn.workers.UvicornWorker src.app:app 
+    volumes:
+      - .:/usr/src/app/
+    expose:
+      - 8000
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - web
